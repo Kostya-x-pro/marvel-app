@@ -13,24 +13,28 @@ class MarvelService {
     return await res.json();
   };
   // Метод получения всех персонажей
-  getAllCharacters = () => {
-    return this.getResource(`${this._apiBase}?limit=9&offset=210&${this._apiKey}`);
+  getAllCharacters = async () => {
+    // res - объект который приходит от API
+    const res = await this.getResource(`${this._apiBase}?limit=9&offset=210&${this._apiKey}`);
+    // в методе map мы запускаем callBack и в this._transformCharacter в аргументы поподает char
+    return res.data.results.map(this._transformCharacter)
   }
   
   // Метод получения одного персонажа
   getCharacter = async (id) => {
+    // res - объект который приходит от API
     const res = await this.getResource(`${this._apiBase}/${id}?${this._apiKey}`);
-    return this._transformCharacter(res);
+    return this._transformCharacter(res.data.results[0]);
   }
   
   // Метод трансформации данных которые мы получаем в API
-  _transformCharacter = (res) => {
+  _transformCharacter = (char) => {
     return {
-      name: res.data.results[0].name,
-      description: res.data.results[0].description,
-      thumbnail: res.data.results[0].thumbnail.path + '.' + res.data.results[0].thumbnail.extension,
-      homePage: res.data.results[0].urls[0].url,
-      wiki: res.data.results[0].urls[1].url,
+      name: char.name,
+      description: char.description,
+      thumbnail: char.thumbnail.path + '.' + char.thumbnail.extension,
+      homePage: char.urls[0].url,
+      wiki: char.urls[1].url,
     }
   }
 }

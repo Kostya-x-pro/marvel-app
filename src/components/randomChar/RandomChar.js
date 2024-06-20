@@ -10,27 +10,25 @@ class RandomChar extends Component {
         this.updateChar() // не правельный вызов временно поставленный не в componentDidMount()
     }
     state = {
-        name: null,
-        description: null,
-        thumbnail: null,
-        homePage: null,
-        wiki: null,
+        char: {}
     }
    
     marvelService = new MarvelService();
+
+    onCharLoaded = (char) => {
+        this.setState({char})
+    }
 
     // Метод получения случайного персонажа по id из API
     updateChar = () => {
         const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000) // генерация случайного id в диапазоне апишки
         this.marvelService
             .getCharacter(id)
-            .then(res => {
-                this.setState(res)
-            })
+            .then(this.onCharLoaded)
     }
 
     render() {
-        const {name, description, thumbnail, homePage, wiki} = this.state
+        const {char: {name, description, thumbnail, homePage, wiki}} = this.state
 
         return (
             <div className="randomchar">
