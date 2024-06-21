@@ -33,7 +33,14 @@ class RandomChar extends Component {
             loading: false
         })
     }
-    
+
+    // Метод который устанавливает загругрузку в true (даёт возможность разместить спинер пока грузится перс.)
+    onCharLoading = () => {
+        this.setState({
+            loading: true
+        })
+    }
+
     // Метод который устанавливает ошибку
     onError = () => {
         this.setState({
@@ -45,6 +52,7 @@ class RandomChar extends Component {
     // Метод получения случайного персонажа по id из API
     updateChar = () => {
         const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000) // генерация случайного id в диапазоне апишки
+        this.onCharLoading();
         this.marvelService
             .getCharacter(id)
             .then(this.onCharLoaded)
