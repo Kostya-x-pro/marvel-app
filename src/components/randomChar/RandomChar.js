@@ -7,10 +7,6 @@ import './randomChar.scss';
 import mjolnir from '../../resources/img/mjolnir.png';
 
 class RandomChar extends Component {
-    constructor(props) {
-        super(props)
-        this.updateChar() // не правельный вызов временно поставленный не в componentDidMount()
-    }
     state = {
         char: {},
         loading: true,
@@ -18,6 +14,17 @@ class RandomChar extends Component {
     }
    
     marvelService = new MarvelService();
+
+    // хук где мы вызаем все свои подписки и сайд эффекты
+    componentDidMount() {
+        this.updateChar();
+        // this.timerId = setInterval(this.updateChar, 50000)
+    }
+
+    // Хук который мы используем при отписке 
+    componentWillUnmount() {
+        clearInterval(this.timerId)
+    }
 
     // Метод который устанавливает загрузку персонажей
     onCharLoaded = (char) => {
@@ -50,7 +57,6 @@ class RandomChar extends Component {
         const errorMessage = error ? <ErrorMessage/> : null;
         const spinner = loading ? <Spinner/> : null;
         const content = !(errorMessage || spinner) ? <View char={char} /> : null;
-
         return (
             <div className="randomchar">
                {errorMessage}
