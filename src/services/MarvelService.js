@@ -1,7 +1,8 @@
 class MarvelService {
   // базовые строкчи для запроса в API
-  _apiBase = "https://gateway.marvel.com:443/v1/public/characters"
-  _apiKey = "apikey=8dc87586c41220020ff212b5e2226108"
+  _apiBase = "https://gateway.marvel.com:443/v1/public/characters";
+  _apiKey = "apikey=8dc87586c41220020ff212b5e2226108";
+  _baseOffset = 210;
   
   getResource = async (url) => {
     let res = await fetch(url);
@@ -13,9 +14,9 @@ class MarvelService {
     return await res.json();
   };
   // Метод получения всех персонажей
-  getAllCharacters = async () => {
+  getAllCharacters = async (offset = this._baseOffset) => {
     // res - объект который приходит от API
-    const res = await this.getResource(`${this._apiBase}?limit=9&offset=210&${this._apiKey}`);
+    const res = await this.getResource(`${this._apiBase}?limit=9&offset=${offset}&${this._apiKey}`);
     // в методе map мы запускаем callBack и в this._transformCharacter в аргументы поподает char
     return res.data.results.map(this._transformCharacter)
   }

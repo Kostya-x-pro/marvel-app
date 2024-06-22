@@ -8,23 +8,46 @@ class CharList extends Component {
 
     state = {
         charList: [],
-        loading: true,
-        error: false
+        loading: true,    // главное состояние загрузки
+        error: false,
+        newItemLoading: false,  // состояние загрузки новых элементоа
+        offset: 210,      // базовый отступ персонажей 
+        charEnded: false   // свойство которое будет опредилять что мы дошли до конца персонажей API
     }
     
     marvelService = new MarvelService();
 
     componentDidMount() {
-        this.marvelService.getAllCharacters()
-            .then(this.onCharListLoaded)
-            .catch(this.onError)
+        this.onRequest();
     }
-
-    onCharListLoaded = (charList) => {
+    // метод для дозагрузки персонажей по аргументу "offset" 
+    onRequest = (offset) => {
+        this.onCharListLoading();
+        this.marvelService.getAllCharacters(offset)
+        .then(this.onCharListLoaded)
+        .catch(this.onError)
+    }
+    // метод для установки состояния загрузки новых пользователей
+    onCharListLoading = () => {
         this.setState({
-            charList,
-            loading: false
+            newItemLoading: true
         })
+    }
+    // newCharList это массив с новыми 9 персонажами
+    onCharListLoaded = (newCharList) => {
+        // переменная ended будет проверять данные которые приходят от API и если там меньше 9 пользователей то меняет своё состояние
+        let ended = false;
+        if (newCharList.length < 9) {
+            ended = true;
+        }
+
+        this.setState(({charList, offset}) => ({
+            charList: [...charList, ...newCharList ],
+            loading: false,
+            newItemLoading: false,
+            offset: offset + 9,
+            charEnded: ended,
+        }))
     }
 
     onError = () => {
@@ -61,7 +84,7 @@ class CharList extends Component {
 
     render() {
 
-        const {charList, loading, error} = this.state;
+        const {charList, loading, error, offset, newItemLoading, charEnded} = this.state;
         
         const items = this.renderItems(charList);
 
@@ -74,7 +97,11 @@ class CharList extends Component {
                 {errorMessage}
                 {spinner}
                 {content}
-                <button className="button button__main button__long">
+                <button 
+                    className="button button__main button__long"
+                    disabled={newItemLoading}
+                    style={{display: charEnded ? 'none' : 'block'}}  // стили что бы спрятать кнопку когда загружены последние персонажи
+                    onClick={() => this.onRequest(offset)}>
                     <div className="inner">load more</div>
                 </button>
             </div>
