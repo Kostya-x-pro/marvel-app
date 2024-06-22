@@ -1,103 +1,114 @@
-import React, {Component, Fragment} from 'react'
+import React,{ Component } from 'react';
+import styled from 'styled-components';
+import BootstrapTest from './BootstrapTest';
 
-class WhoAmi extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      years: 27,
-      plus: '+++',
-      minus: '---',
-      position: ''
+const EmpItem = styled.div`
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    box-shadow: 5px 5px 10px rgba(0,0,0, .2);
+    a {
+        display: block;
+        margin: 10px 0 10px 0;
+        color: ${props => props.active ? 'orange' : 'black'};
     }
-    // 1. Привязка контекста c помощью bind
-    this.prevYear = this.prevYear.bind(this);
-  }
+    input {
+        display: block;
+        margin-top: 10px;
+    }
+`;
 
-  prevYear() {
-    this.setState(state => {
-      return {
-        years: state.years - 1
-      }
-    })
-  }
+const Header = styled.h2`
+    font-size: 22px;
+`;
 
-  // 2. Привязка контекста c помощью полей класса
-  nextYear = () => {
-    this.setState(({years}) => ({years: years + 1}))
-  }
+export const Button = styled.button`
+    display: block;
+    padding: 5px 15px;
+    background-color: gold;
+    border: 1px solid rgba(0,0,0, .2);
+    box-shadow: 5px 5px 10px rgba(0,0,0, .2);
+`;
 
-  commitInputChanges = (e) => {
-    this.setState({
-      position: e.target.value
-    })
-  }
-  
-  render() {
-    const {name, secondName, link} = this.props
-    const {plus, minus, years, position} = this.state;
+class WhoAmI extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            years: 27,
+            position: ''
+        }
+    }
 
-  // 3. Привязка контекста c помощью ананимного колбыка
-  //<button onClick={() => this.prevYear}>{minus}</button>
+    nextYear = () => {
+        this.setState(state => ({
+            years: state.years + 1
+        }))
+    }
 
-    return (
-      // Фрагмент импортированный
-      <Fragment> 
-        <div style={{border: '1px solid black', margin: '10px', padding: '10px'}}>
-          <button onClick={this.nextYear}>{plus}</button>
-          <button onClick={this.prevYear}>{minus}</button>
-          <h1>My name is: {name}, 
-              surename: {secondName}, 
-              age: {years}  
-              position: {position}
-          </h1>
-          <a href={link}>My profile</a>
-          <form>
-            <span>Введите должность</span>
-            <input type="text" onChange={this.commitInputChanges} />
-          </form>
-        </div>
-      </Fragment>
-    )
-  }
+    commitInputChanges = (e, color) => {
+        console.log(color);
+        this.setState({
+            position: e.target.value
+        })
+    }
+
+    render() {
+        const {name, surname, link} = this.props;
+        const {position, years} = this.state;
+
+        return (
+            <EmpItem active>
+                <Button onClick={this.nextYear}>+++</Button>
+                <Header>My name is {name}, surname - {surname}, 
+                    age - {years}, 
+                    position - {position}</Header>
+                <a href={link}>My profile</a>
+                <form>
+                    <span>Введите должность</span>
+                    <input type="text" onChange={(e) => this.commitInputChanges(e, 'some color')} />
+                </form>
+            </EmpItem>
+        )
+    }
 }
 
-// Render Props
+const Wrapper = styled.div`
+    width: 600px;
+    margin: 80px auto 0 auto;
+`;
+
 const DynamicGreating = (props) => {
-  return (
-    <div className={'mb-3 p-3 boreder-' + props.color}>
-      {/* {props.children} */} 
-      
-      {
-        React.Children.map(props.children, child => {
-          return React.cloneElement(child, {className: 'shadow p-3 m-3 border rounded'})
-        })
-      }
-    </div>
-  )
+    return (
+        <div className={'mb-3 p-3 border border-' + props.color}>
+            {
+                React.Children.map(props.children, child => {
+                    return React.cloneElement(child, {className: 'shadow p-3 m-3 border rounded'})
+                })
+            }
+        </div>
+    )
 }
 
 function MyTestApp() {
   return (
-    // Фрагмент пустой
-    <>
-    {/*динамические пропсы  */}
-      <DynamicGreating color={'primary'}>
-        <h2>This wtll hard</h2>
-        <h2>Hello world</h2>
-      </DynamicGreating>
+    <Wrapper>
+        <BootstrapTest
+            left = {
+                <DynamicGreating color={'primary'}>
+                    <h2>This weel was hard</h2>
+                    <h2>Hello world!</h2>
+                </DynamicGreating>
+            }
+            right = {
+                <DynamicGreating color={'primary'}>
+                    <h2>RIGHT!</h2>
+                </DynamicGreating>
+            }
+        />
 
-
-      <div className="App">
-        <WhoAmi 
-          name="John" 
-          secondName="Smith"  
-          link="facebook.com"/>
-        <WhoAmi 
-          name="Alex" 
-          secondName="Shepard" 
-          link="vk.com"/>
-      </div>
-    </>
+        <WhoAmI name='John' surname="Smith" link="facebook.com"/>
+        <WhoAmI name='Alex' surname="Shepard" link="vk.com"/>
+    </Wrapper>
   );
 }
 
