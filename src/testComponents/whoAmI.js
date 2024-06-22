@@ -89,9 +89,20 @@ const DynamicGreating = (props) => {
     )
 }
 
+const HelloGeatings = () => {
+  return (
+    <div style={{width: '600px', margin: '0 auto'}}>
+        <DynamicGreating color={'primary'}>
+          <h2>Hello world!</h2>
+      </DynamicGreating>
+    </div>
+  )
+}
+
 function MyTestApp() {
   return (
     <Wrapper>
+      <HelloGeatings/>
         <BootstrapTest
             left = {
                 <DynamicGreating color={'primary'}>
