@@ -98,10 +98,48 @@ const HelloGeatings = () => {
     </div>
   )
 }
+// Render Props
+const Message = (props) => {
+  return (
+    <h2>The counter id {props.counter}</h2>
+  )
+}
+
+class Counter extends Component {
+  state = {
+    counter: 0
+  }
+
+  changeCounter = () => {
+    this.setState(({counter}) => ({
+      counter: ++counter
+    }))
+  }
+
+  render() {
+    return (
+      <>
+        <button 
+          className={'btn btn-primary'}
+          onClick={this.changeCounter}>
+            Click me
+        </button>
+        {/* Сама функция rederProps */}
+        {this.props.render(this.state.counter)} 
+        {/* <Message counter={this.props.counter}/> - то что мы не хотим делать */}
+      </>
+    )
+  }
+}
 
 function MyTestApp() {
   return (
     <Wrapper>
+      {/* RenderProps должна быть функция */}
+      <Counter render={counter => (
+        <Message counter={counter}/>
+      )}/>
+
       <HelloGeatings/>
         <BootstrapTest
             left = {
