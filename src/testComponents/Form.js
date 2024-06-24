@@ -1,68 +1,80 @@
 import React, {Component} from 'react';
+import ReactDOM from 'react-dom'
 import {Container} from 'react-bootstrap';
 
 class Form extends Component {
-  // Создание рефов
-    // 1. Рефы по сути это ссылки на реальный компонент в DOM дереве
-    // myRef = React.createRef();
-    // mySecondRef = React.createRef();
+  state = {
+    advOpen: false
+  }
 
-    // componentDidMount() {
-    //   // this.myRef.current.focus();
-    // }
+  // Событие которое будет срабатывать как на портале так и на форме
+  handleClick = () => {
+    this.setState(({advOpen}) => ({
+      advOpen: !advOpen
+    }))
+    console.log(this.state.advOpen);
+  }
 
-    // 2. Метод callBackRef-ы
-      setInputRef = elem => {
-        this.myRef = elem;
-      }
-
-
-    // Метод установки фокуса на первое поле текстового инпута при клике на текстэрию
-    focusFirstTI = () => {
-      // this.myRef.current.focus();
-      // метод назначения рефов при методе callBackRef
-     if (this.myRef) {
-      this.myRef.focus();
-     }
-    }
+  componentDidMount() {
+    setTimeout(this.handleClick, 3000)
+  }
 
     render() {
         return (
             <Container>
-                <form className="w-50 border mt-5 p-3 m-auto">
+                <form className="w-50 border mt-5 p-3 m-auto"
+                  onClick={this.handleClick}>
                     <div className="mb-3">
                         <label htmlFor="exampleFormControlInput1" className="form-label">Email address</label>
                         <input 
-                          // ref={this.myRef} 
-                          ref={this.setInputRef} 
                           type="email" 
                           className="form-control" 
                           id="exampleFormControlInput1" 
                           placeholder="name@example.com"/>
-                        {/* <TextInput ref={this.myRef}/> */}
                     </div>
                     <div className="mb-3">
                         <label htmlFor="exampleFormControlTextarea1" className="form-label">Example textarea</label>
                         <textarea
-                          onClick={this.focusFirstTI} 
                           className="form-control" 
                           id="exampleFormControlTextarea1" 
                           rows="3"></textarea>
                     </div>
+
+                  {/* портал который рендорит компоненент вне формы просто в body */}
+                    {
+                      this.state.advOpen ? 
+                              <Portal>
+                                <Msg/>
+                              </Portal> :
+                              null
+                    }
+
+            
                 </form>
             </Container>
         )
     }
 }
 
-// реф нельзя поставить на функциональный компонент
-const TextInput = () => {
+// Создание портала
+const Portal = (props) => {
+  const node = document.createElement('div');
+  document.body.append(node);
+
+  return ReactDOM.createPortal(props.children, node)
+}
+
+const Msg = () => {
   return (
-    <input 
-      type="email" 
-      className="form-control" 
-      id="exampleFormControlInput1" 
-      placeholder="name@example.com"/>
+    <div 
+      style={{width: '500px',
+              height: '150px',
+              backgroundColor: 'red',
+              position: 'absolute',
+              right: '0',
+              bottom: '0'}}>
+        Hello
+    </div>
   )
 }
 
