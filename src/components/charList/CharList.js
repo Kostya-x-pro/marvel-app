@@ -58,6 +58,22 @@ class CharList extends Component {
         })
     }
 
+    // Массив рефов на каждый элемент который мы заполним ниже при использовании map
+    itemRefs = [];
+
+    // Метод для записи рефов в массив.
+    setRef = ref => {
+        this.itemRefs.push(ref)
+    }
+
+    // Удаление класса фокуса если есть и добовление одной карточке класс и фокус
+    focusOnitem = (id) => {
+        this.itemRefs.forEach(item => item.classList.remove('char__item_selected'));
+        this.itemRefs[id].classList.add('char__item_selected');
+        this.itemRefs[id].focus();
+    }
+
+    // Методо для оптимизации что бы не перегружать большими конструкциями рендер
     renderItems(arr) {
         const items =  arr.map((item, i) => {
             let imgStyle = {'objectFit' : 'cover'};
@@ -68,8 +84,14 @@ class CharList extends Component {
             return (
                 <li 
                     className="char__item"
+                    tabIndex={0}
+                    ref={this.setRef}
                     key={i} // временно поставлен индекс т.к лезут ошибки с item.id
-                    onClick={() => this.props.onCharselected(item.id)}>
+                    onClick={() => {
+                        this.props.onCharselected(item.id)
+                        // Вызов метода по установке фокуса и класса активности
+                        this.focusOnitem(i)
+                    }}>
                         <img src={item.thumbnail} alt={item.name} style={imgStyle}/>
                         <div className="char__name">{item.name}</div>
                 </li>
