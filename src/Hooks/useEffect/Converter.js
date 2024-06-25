@@ -1,8 +1,8 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import './Converter.css';
 
 // Функция для запроса на сервер
-const getCurrensy = async (url) => {
+const getData = async (url) => {
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error(`could not fetch status: ${response.status}`)
@@ -10,38 +10,53 @@ const getCurrensy = async (url) => {
   return await response.json();
 }
 
-const Converter = (props) => {
-  const initialCurs = props.currency;
-  const [currency, setCurrency] = useState(initialCurs)
+const Converter = () => {
+  const [amount, setAmount] = useState('');
+  const [result, setResult] = useState(0);
+  const [currency, setCurrency] = useState(null);
 
-  // Вызов функции по установке курса 
-  function changeCurrency(curId, rate) {
-    getCurrensy(`https://api.nbrb.by/exrates/rates/${curId}`)
-    .then(data => {
-      setCurrency((initialCurs * (rate ? 
-        data.Cur_OfficialRate * rate : 
-        data.Cur_OfficialRate)).toFixed(2))
-    })
-    .catch(erorr => console.log('Error', erorr))
+  useEffect(() => {
+    if (currency) {
+      getCurrency(currency)
+    }
+  }, [currency])
+
+  function getCurrency(currency) {
+    getData(`https://api.nbrb.by/exrates/rates/${currency}`)
+      .then(data => {
+        setResult(+(amount * data.Cur_OfficialRate).toFixed(2))
+      })
+      .catch(error => console.log('Error', error))
   }
 
     return (
       <div className="couter__wrapper">
-         {/* <input 
-        type="number" 
-        className="currency__Input"
-        placeholder="Enter you currency here"
-        onChange={test} /> */}
-        <div className="counter">{currency}</div>
+         <input 
+          type="number" 
+          className="currency__Input"
+          placeholder="Enter you currency here"
+          value={amount}
+          onChange={(e) => setAmount(+e.target.value)} />
+        <div className="counter">{result}</div>
         <div className="controls">
-          <button onClick={() => changeCurrency(431)}>USD</button>
-          <button onClick={() => changeCurrency(451)}>EUR</button>
-          <button onClick={() => changeCurrency(456, 0.01)}>RUB</button>
-          <button onClick={() => setCurrency(initialCurs)}>RESET</button>
+          <button onClick={() => setCurrency(431)}>USD</button>
+          <button onClick={() => setCurrency(451)}>EUR</button>
+          {/* <button onClick={() => {
+            setCofficient(0.01)
+            setCurrency(456)
+          }}>RUB</button> */}
+          <button onClick={() => {
+            setAmount('');
+            setResult(0);
+          }}>RESET</button>
         </div>
       </div>
     )
 }
+
+// usd - 431
+// eur - 451
+// rub - 456
 
 export default Converter;
 

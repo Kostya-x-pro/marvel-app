@@ -11,6 +11,6 @@ root.render(
   <StrictMode>
     {/* <App/> */}
 
-    <Converter currency={1}/>
+    <Converter/>
   </StrictMode>
 );
