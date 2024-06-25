@@ -11,9 +11,10 @@ const getData = async (url) => {
 }
 
 const Converter = () => {
-  const [amount, setAmount] = useState('');
-  const [result, setResult] = useState(0);
-  const [currency, setCurrency] = useState(null);
+  const [amount, setAmount] = useState(''); // колличество валлюты к обмену
+  const [baseCofficient, setBaseCofficient] = useState(1) // базовы коэффицент
+  const [currency, setCurrency] = useState(null); // код валюты в API
+  const [result, setResult] = useState(0); // результат на выходе
 
   useEffect(() => {
     if (currency) {
@@ -21,12 +22,19 @@ const Converter = () => {
     }
   }, [currency])
 
+  // функция по установке курса
   function getCurrency(currency) {
     getData(`https://api.nbrb.by/exrates/rates/${currency}`)
       .then(data => {
-        setResult(+(amount * data.Cur_OfficialRate).toFixed(2))
+        setResult(+(amount * data.Cur_OfficialRate * baseCofficient).toFixed(2))
       })
       .catch(error => console.log('Error', error))
+  }
+
+  // функция по изменению типа валюты и базвого коээфицента 
+  function getResult(currencyID, cofficent) {
+    setBaseCofficient(cofficent);
+    setCurrency(currencyID);
   }
 
     return (
@@ -34,17 +42,14 @@ const Converter = () => {
          <input 
           type="number" 
           className="currency__Input"
-          placeholder="Enter you currency here"
+          placeholder="Enter you BYN currency here"
           value={amount}
           onChange={(e) => setAmount(+e.target.value)} />
         <div className="counter">{result}</div>
         <div className="controls">
-          <button onClick={() => setCurrency(431)}>USD</button>
-          <button onClick={() => setCurrency(451)}>EUR</button>
-          {/* <button onClick={() => {
-            setCofficient(0.01)
-            setCurrency(456)
-          }}>RUB</button> */}
+          <button onClick={() => getResult(431, 1)}>USD</button>
+          <button onClick={() => getResult(451, 1)}>EUR</button>
+          <button onClick={() => getResult(456, 0.01)}>RUB</button>
           <button onClick={() => {
             setAmount('');
             setResult(0);
