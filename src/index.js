@@ -2,7 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./components/app/App";
 
-import { UseStateSlider, Counter } from "./Hooks/index";
+import Converter from "./Hooks/useEffect/Converter"
 import "./style/style.scss";
 
 const container = document.getElementById("root");
@@ -11,7 +11,6 @@ root.render(
   <StrictMode>
     {/* <App/> */}
 
-    <UseStateSlider/>
-    {/* <Counter counter={0}/> */}
+    <Converter currency={1}/>
   </StrictMode>
 );
