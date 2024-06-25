@@ -1,4 +1,4 @@
-import {Component, useState} from 'react';
+import {Component, useState, useEffect} from 'react';
 import {Container} from 'react-bootstrap';
 import './useState-Slider.css'
 
@@ -7,6 +7,26 @@ const Slider = (props) => {
   // в начальное состояние можно передать функцию или колбэк но не вызов функции, это приведёт к ненужным перерендерам
   const [slide, setSlide] = useState(0); 
   const [autoplay, setAutoplay] = useState(false);
+
+  function logging() {
+    console.log('Log!');
+  }
+
+  useEffect(() => {
+    console.log('effect');
+    document.title = `Slide: ${slide}`
+    // Обработчики нужно удалять при удалении компонента!
+    // window.addEventListener('click', logging);
+
+    // // Если вовзвращаем CallBack то мы отписываемся от действий вызывающих побочные эффекты (например как здесь работа с DOM API)
+    // return () => {
+    //   window.removeEventListener('click', logging);
+    // }
+  }, [slide]);
+
+  useEffect(() => {
+    console.log('autoplay');
+  }, [autoplay]);
 
   const changeSlide = (i) => {
     setSlide(slide => slide + i)
@@ -40,14 +60,19 @@ const Slider = (props) => {
 
 
 function UseStateSlider() {
+  const [slide, setSlider] = useState(true);
+
   return (
-        <Slider/>
+    <>
+      <button onClick={() => setSlider(false)}>Click</button>
+      {slide ? <Slider/> : null}
+    </>
   );
 }
 
 export default UseStateSlider;
 
-// Слайдер на классах 
+// // Слайдер на классах 
 // class Slider extends Component {
 
 //     constructor(props) {
@@ -56,6 +81,14 @@ export default UseStateSlider;
 //             autoplay: false,
 //             slide: 0
 //         }
+//     }
+
+//     componentDidMount() {
+//       document.title = `Slide: ${this.state.slide}`
+//     }
+
+//     componentDidUpdate() {
+//       document.title = `Slide: ${this.state.slide}`
 //     }
 
 //     changeSlide = (i) => {

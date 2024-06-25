@@ -11,7 +11,7 @@ root.render(
   <StrictMode>
     {/* <App/> */}
 
-    {/* <UseStateSlider/> */}
-    <Counter counter={0}/>
+    <UseStateSlider/>
+    {/* <Counter counter={0}/> */}
   </StrictMode>
 );
