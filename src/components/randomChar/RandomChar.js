@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState, useEffect } from 'react';
 import MarvelService from '../../services/MarvelService';
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
@@ -6,89 +6,74 @@ import ErrorMessage from '../errorMessage/ErrorMessage';
 import './randomChar.scss';
 import mjolnir from '../../resources/img/mjolnir.png';
 
-class RandomChar extends Component {
-    state = {
-        char: {},
-        loading: true,
-        error: false,
-    }
+const RandomChar = () => {
+    const [char, setChar] = useState({});
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
    
-    marvelService = new MarvelService();
+    const marvelService = new MarvelService();
 
-    // хук где мы вызаем все свои подписки и сайд эффекты
-    componentDidMount() {
-        this.updateChar();
-        // this.timerId = setInterval(this.updateChar, 50000)
-    }
+    useEffect(() => {
+        console.log('update');
+        updateChar();
+        const timerId = setInterval(updateChar, 50000);
 
-    // Хук который мы используем при отписке 
-    componentWillUnmount() {
-        clearInterval(this.timerId)
-    }
+        return () => {
+            clearInterval(timerId)
+        }
+    }, [])
 
     // Метод который устанавливает загрузку персонажей
-    onCharLoaded = (char) => {
-        this.setState({
-            char, 
-            loading: false
-        })
+    const onCharLoaded = (char) => {
+        setChar(char);
+        setLoading(false)
     }
 
     // Метод который устанавливает загругрузку в true (даёт возможность разместить спинер пока грузится перс.)
-    onCharLoading = () => {
-        this.setState({
-            loading: true
-        })
-    }
+    const onCharLoading = () => setLoading(true);
 
     // Метод который устанавливает ошибку
-    onError = () => {
-        this.setState({
-            loading: false,
-            error: true
-        })
+    const onError = () => {
+        setLoading(false);
+        setError(true);
     }
 
     // Метод получения случайного персонажа по id из API
-    updateChar = () => {
+    const updateChar = () => {
         const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000) // генерация случайного id в диапазоне апишки
-        this.onCharLoading();
-        this.marvelService
-            .getCharacter(id)
-            .then(this.onCharLoaded)
-            .catch(this.onError)
+        onCharLoading();
+        marvelService.getCharacter(id)
+            .then(onCharLoaded)
+            .catch(onError)
     }
 
-    render() {
         // Способ условного рендаринга компонента Ошибки или Загрузки или Контента в зависимости от условия
-        const {char, loading, error} = this.state;
-        const errorMessage = error ? <ErrorMessage/> : null;
-        const spinner = loading ? <Spinner/> : null;
-        const content = !(errorMessage || spinner) ? <View char={char} /> : null;
-        return (
-            <div className="randomchar">
-               {errorMessage}
-               {spinner}
-               {content}
-                <div className="randomchar__static">
-                    <p className="randomchar__title">
-                        Random character for today!<br/>
-                        Do you want to get to know him better?
-                    </p>
-                    <p className="randomchar__title">
-                        Or choose another one
-                    </p>
-                    <button className="button button__main">
-                        <div 
-                        className="inner"
-                        onClick={this.updateChar}
-                        >try it</div>
-                    </button>
-                    <img src={mjolnir} alt="mjolnir" className="randomchar__decoration"/>
-                </div>
+    const errorMessage = error ? <ErrorMessage/> : null;
+    const spinner = loading ? <Spinner/> : null;
+    const content = !(errorMessage || spinner) ? <View char={char} /> : null;
+    return (
+        <div className="randomchar">
+            {errorMessage}
+            {spinner}
+            {content}
+            <div className="randomchar__static">
+                <p className="randomchar__title">
+                    Random character for today!<br/>
+                    Do you want to get to know him better?
+                </p>
+                <p className="randomchar__title">
+                    Or choose another one
+                </p>
+                <button className="button button__main">
+                    <div 
+                    className="inner"
+                    onClick={updateChar}
+                    >try it</div>
+                </button>
+                <img src={mjolnir} alt="mjolnir" className="randomchar__decoration"/>
             </div>
-        )
-    }
+        </div>
+    )
 }
 
 const View = ({char}) => {
