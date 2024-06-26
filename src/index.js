@@ -8,6 +8,7 @@ import {
   UseCallBackSlider,
   UseRefForm,
   UseMemoSlider,
+  CustomHook,
  } from "./Hooks/index";
 import "./style/style.scss";
 
@@ -20,7 +21,8 @@ root.render(
     {/* <UseStateSlider/> */}
     {/* <UseCallBackSlider/> */}
     {/* <UseMemoSlider/> */}
-    <UseRefForm/>
+    {/* <UseRefForm/> */}
+    <CustomHook/>
     {/* <Counter counter={0}/> */}
   </StrictMode>
 );
