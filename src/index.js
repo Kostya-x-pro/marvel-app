@@ -6,6 +6,7 @@ import {
   UseStateSlider, 
   Counter, 
   UseCallBackSlider,
+  UseRefForm,
   UseMemoSlider,
  } from "./Hooks/index";
 import "./style/style.scss";
@@ -18,7 +19,8 @@ root.render(
 
     {/* <UseStateSlider/> */}
     {/* <UseCallBackSlider/> */}
-    <UseMemoSlider/>
+    {/* <UseMemoSlider/> */}
+    <UseRefForm/>
     {/* <Counter counter={0}/> */}
   </StrictMode>
 );
