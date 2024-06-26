@@ -1,4 +1,4 @@
-import { Component } from "react";
+import { useState } from "react";
 import AppHeader from "../appHeader/AppHeader";
 import RandomChar from "../randomChar/RandomChar";
 import CharList from "../charList/CharList";
@@ -7,19 +7,12 @@ import ErrorBoundary from "../errorBoundary/ErrorBoundary";
 
 import decoration from '../../resources/img/vision.png';
 
-// переписали на класс что бы поднять состояние из CharList в CharInfo
-class App extends Component {
-    state = {
-        selectedChar: null
-    }
+// переписываем проект на функциональные компоненты и хуки
+const App = () => {
+    const [selectedChar, setChar] = useState(null)
 
-    onCharselected = (id) => {
-        this.setState({
-            selectedChar: id
-        })
-    }
+    const onCharselected = (id) => setChar(id);
 
-   render() {
     return (
         <div className="app">
             <AppHeader/>
@@ -29,17 +22,16 @@ class App extends Component {
                 </ErrorBoundary>  
                 <div className="char__content">
                     <ErrorBoundary>
-                        <CharList onCharselected={this.onCharselected} />
+                        <CharList onCharselected={onCharselected} />
                     </ErrorBoundary>
                     <ErrorBoundary>
-                        <CharInfo charId={this.state.selectedChar}/>
+                        <CharInfo charId={selectedChar}/>
                     </ErrorBoundary>
                 </div>
                 <img className="bg-decoration" src={decoration} alt="vision"/>
             </main>
         </div>
     )
-   }
 }
 
 export default App;
