@@ -2,7 +2,12 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./components/app/App";
 
-import { UseStateSlider, Counter, UseCallBackSlider } from "./Hooks/index";
+import {
+  UseStateSlider, 
+  Counter, 
+  UseCallBackSlider,
+  UseMemoSlider,
+ } from "./Hooks/index";
 import "./style/style.scss";
 
 const container = document.getElementById("root");
@@ -12,7 +17,8 @@ root.render(
     {/* <App/> */}
 
     {/* <UseStateSlider/> */}
-    <UseCallBackSlider/>
+    {/* <UseCallBackSlider/> */}
+    <UseMemoSlider/>
     {/* <Counter counter={0}/> */}
   </StrictMode>
 );
