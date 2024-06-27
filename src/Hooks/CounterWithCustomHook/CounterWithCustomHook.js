@@ -1,13 +1,26 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 import './CounterWithCustomHook.css'
 
-function useCounter(initialValue) {
-  const [counter, setCounter] = useState(initialValue);
+function useCounter() {
+  const [counter, setCounter] = useState(0);
+  
+  useEffect(() => {
+    getNumber("https://www.random.org/integers/?num=1&min=-50&max=50&col=1&base=10&format=plain&rnd=new")
+    .then(data => setCounter(data))
+  }, [])
+  
+  const getNumber = async (url) => {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`could not fetch status: ${response.status}`)
+    } 
+    return await response.json();
+  }
 
   const handleChangeCounter = (i) => setCounter(counter => counter + i);
   const rndChangeCounter = () => setCounter(Math.floor(Math.random() * (50 - -50) + -50));
-  const resetCounter = () => setCounter(initialValue); 
+  const resetCounter = () => setCounter(0); 
 
   return {
     counter, 
@@ -17,8 +30,8 @@ function useCounter(initialValue) {
   }
 }
 
-const Counter = (props) => {
-  const {counter, handleChangeCounter, rndChangeCounter, resetCounter} = useCounter(props.counter)
+const Counter = () => {
+  const {counter, handleChangeCounter, rndChangeCounter, resetCounter} = useCounter()
 
     return (
       <div className="component">
@@ -33,8 +46,8 @@ const Counter = (props) => {
     )
 }
 
-const RndCounter = (props) => {
-  const {counter, rndChangeCounter, resetCounter} = useCounter(props.counter)
+const RndCounter = () => {
+  const {counter, rndChangeCounter, resetCounter} = useCounter()
 
     return (
       <div className="component">
@@ -50,8 +63,8 @@ const RndCounter = (props) => {
 const CounterWithCustomHook = () => {
     return (
         <>
-            <Counter counter={0}/>
-            <RndCounter counter={5}/>
+          <Counter/>
+          <RndCounter/>
         </>
     )
 }
