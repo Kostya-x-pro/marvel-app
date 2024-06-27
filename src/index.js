@@ -2,7 +2,9 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./components/app/App";
 
-import Converter from "./Hooks/useEffect/Converter"
+import Converter from "./Hooks/useEffect/Converter";
+import CounterWithCustomHook from "./Hooks/CounterWithCustomHook/CounterWithCustomHook";
+
 import "./style/style.scss";
 
 const container = document.getElementById("root");
@@ -11,6 +13,7 @@ root.render(
   <StrictMode>
     {/* <App/> */}
 
-    <Converter/>
+    {/* <Converter/> */}
+    <CounterWithCustomHook/>
   </StrictMode>
 );
