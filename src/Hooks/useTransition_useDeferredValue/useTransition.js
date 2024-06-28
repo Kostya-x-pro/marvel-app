@@ -1,18 +1,22 @@
 import data from './data';
-import {useState, useMemo, useDeferredValue} from 'react';
+import {useState, useMemo, useTransition} from 'react';
 
 function MyTestTransition() {
     const [text, setText] = useState('');
     const [posts, setPosts] = useState(data);
-    // useDefferedValue - позволяет выполнить сначала все срочные render-ы а затем отложенные.
-    const defferedValue = useDeferredValue(text);
+    // useTransition - позволяет выполнить сначала все срочные render-ы а затем отложенные но котролируемо.
+    // isPending - позволяет отслеживать состояние перехода  (true или false)
+    // startTransition - запуск перехода
+    const [isPending, startTransition] = useTransition()
 
     const filteredPosts = useMemo(() => {
         return posts.filter(item => item.name.toLowerCase().includes(text));
-    }, [defferedValue]);
+    }, [text]);
 
     const onValueChange = (e) => {
-        setText(e.target.value);
+        startTransition(() => {
+          setText(e.target.value);
+        })
     }
 
     return (
@@ -22,14 +26,18 @@ function MyTestTransition() {
             <hr/>
 
             <div>
-                {filteredPosts.map(post => (
+              {
+                isPending ? <h4>Loading...</h4> : 
+                filteredPosts.map(post => (
                     <div key={post._id}>
                         <h4>{post.name}</h4>
                     </div>
-                ))}
+                ))
+              } 
             </div>
         </div>
     );
 }
+
 
 export default MyTestTransition;
