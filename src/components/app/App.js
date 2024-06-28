@@ -1,30 +1,26 @@
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom/cjs/react-router-dom.min";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom"; 
 import AppHeader from "../appHeader/AppHeader";
 import { MainPage, ComicsPage } from "../pages";
+// изменения в v.6 версии
 // BrowserRouter - (Router) - главный компонент которы оборачивает все компоненты для работы маршрутизации
 // Route - маршрут по которому мы направляем наши компоненты
-// Switch - оборачивает все "Route" для настройки путей (что бы указывать конретные совпадения)
+// Switch (не нужен) - Заменен на Routes
+// Добавлен компонент Outlet - который по сути является placeHolderom для рендера других компонентов (т.е о как бы резервирует для них место)
 
 // Атрибуты:
 // path - путь к нашей странице "принимает строку" ("/" - корень сайта)
-// exact - говорит атрибуту "path" что только полное совпадение необходимо рендарить
+// elemet - рендорит компонент
+
 const App = () => {
     return (
         <Router>
             <div className="app">
             <AppHeader/>
             <main>
-               <Switch>
-
-                    <Route exact path="/">
-                       <MainPage/>
-                    </Route>
-                    
-                    <Route exact path="/comics">
-                        <ComicsPage/>
-                    </Route>
-                    
-               </Switch>
+               <Routes>
+                    <Route path="/" element={<MainPage/>}/>
+                    <Route path="/comics" element={<ComicsPage/>}/>
+               </Routes>
             </main>
         </div>
         </Router>

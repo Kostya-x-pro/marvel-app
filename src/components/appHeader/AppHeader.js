@@ -1,8 +1,11 @@
-import { Link, NavLink } from 'react-router-dom/cjs/react-router-dom.min';
+import { Link, NavLink } from "react-router-dom";
 import './appHeader.scss';
 
 // Link - компонент который будет заменять ссылки и направлять при клике по пути "path"
 // NavLink - компонент который будет заменять ссылки и направлять при клике по пути "path" только стилизованный (можно применять классы)
+
+// exact - заменён на end
+// activStyle - удалён. (теперь стили нужно передовать функцию в виде колбэка)
 
 const AppHeader = () => {
     return (
@@ -14,8 +17,14 @@ const AppHeader = () => {
             </h1>
             <nav className="app__menu">
                 <ul>
-                    <li><NavLink exact activeStyle={{color: '#9f0013'}} to="/">Characters</NavLink></li>
-                    <li><NavLink exact activeStyle={{color: '#9f0013'}} to="/comics">Comics</NavLink></li>
+                    <li><NavLink 
+                            end 
+                            style={({isActive}) => ({color: isActive ? '#9f0013' : 'inherit'})} 
+                            to="/">Characters</NavLink></li>
+                    <li><NavLink 
+                            end 
+                            style={({isActive}) => ({color: isActive ? '#9f0013' : 'inherit'})} 
+                            to="/comics">Comics</NavLink></li>
                 </ul>
             </nav>
         </header>

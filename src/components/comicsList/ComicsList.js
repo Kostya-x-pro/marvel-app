@@ -24,7 +24,6 @@ const ComicsList = () => {
     }
 
     const onComicLoaded = (newComicList) => {
-        console.log(newComicList);
         let ended = false;
         if (newComicList < 8) {
             ended = true;
