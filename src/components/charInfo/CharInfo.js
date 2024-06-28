@@ -3,16 +3,14 @@ import PropTypes from 'prop-types';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import Spinner from '../spinner/Spinner';
 import Skeleton from '../skeleton/Skeleton';
-import MarvelService from '../../services/MarvelService';
+import useMarvelService from '../../services/MarvelService';
 
 import './charInfo.scss';
 
 const CharInfo = (props) => {
     const [char, setChar] = useState(null); // потому что {} в логич контексте true
-    const [loading, setloading] = useState(false); // потому что компонент начинает грузиться только по клику на пользователя
-    const [error, setError] = useState(false);
 
-    const marvelService = new MarvelService();
+    const {loading, error, getCharacter, clearError} = useMarvelService();
 
     useEffect(() => {
         updateChar();
@@ -25,25 +23,12 @@ const CharInfo = (props) => {
             return
         }
 
-        onCharLoading();
-
-        marvelService.getCharacter(charId)
+        clearError();
+        getCharacter(charId)
             .then(onCharLoaded)
-            .catch(onError)
     }
 
-    const onCharLoaded = (char) => {
-        setChar(char);
-        setloading(false);
-    }
-
-    const onCharLoading = () => setloading(true);
-
-    const onError = () => {
-        setloading(false);
-        setError(true);
-    }
-
+    const onCharLoaded = (char) => setChar(char);
         const skeleton = char || loading || error ? null : <Skeleton/>
         const errorMesage = error ? <ErrorMessage/> : null;
         const spinner = loading ? <Spinner/> : null;

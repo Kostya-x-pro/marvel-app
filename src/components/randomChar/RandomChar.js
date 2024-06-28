@@ -1,20 +1,17 @@
 import { useState, useEffect } from 'react';
-import MarvelService from '../../services/MarvelService';
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
+import useMarvelService from '../../services/MarvelService';
 
 import './randomChar.scss';
 import mjolnir from '../../resources/img/mjolnir.png';
 
 const RandomChar = () => {
     const [char, setChar] = useState({});
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
    
-    const marvelService = new MarvelService();
+    const {loading, error, getCharacter, clearError} = useMarvelService();
 
     useEffect(() => {
-        console.log('update');
         updateChar();
         const timerId = setInterval(updateChar, 50000);
 
@@ -26,25 +23,14 @@ const RandomChar = () => {
     // Метод который устанавливает загрузку персонажей
     const onCharLoaded = (char) => {
         setChar(char);
-        setLoading(false)
-    }
-
-    // Метод который устанавливает загругрузку в true (даёт возможность разместить спинер пока грузится перс.)
-    const onCharLoading = () => setLoading(true);
-
-    // Метод который устанавливает ошибку
-    const onError = () => {
-        setLoading(false);
-        setError(true);
     }
 
     // Метод получения случайного персонажа по id из API
     const updateChar = () => {
+        clearError();
         const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000) // генерация случайного id в диапазоне апишки
-        onCharLoading();
-        marvelService.getCharacter(id)
+        getCharacter(id)
             .then(onCharLoaded)
-            .catch(onError)
     }
 
         // Способ условного рендаринга компонента Ошибки или Загрузки или Контента в зависимости от условия
