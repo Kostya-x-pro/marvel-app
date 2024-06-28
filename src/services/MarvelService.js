@@ -57,7 +57,7 @@ const useMarvelService = () => {
       language: comic.textObjects[0]?.language || "en-us",
       // language: comic,
       pageCount: comic.pageCount ? 
-                `${comic.pageCount} р.` : 
+                `${comic.pageCount} pages` : 
                 'Колличество страниц не известно',
       price: comic.prices[0].price ? 
                 `${comic.prices[0].price} $` :
@@ -65,7 +65,7 @@ const useMarvelService = () => {
     }
   }
 
-  return {loading, error, getAllCharacters, getCharacter, clearError, getAllComics}
+  return {loading, error, getAllCharacters, getCharacter, clearError, getAllComics, getComic}
 }
 
 export default useMarvelService;

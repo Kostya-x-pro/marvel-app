@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom"; 
 import AppHeader from "../appHeader/AppHeader";
-import { MainPage, ComicsPage } from "../pages";
+import { MainPage, ComicsPage, Page404, SingleComicPage } from "../pages";
 // изменения в v.6 версии
 // BrowserRouter - (Router) - главный компонент которы оборачивает все компоненты для работы маршрутизации
 // Route - маршрут по которому мы направляем наши компоненты
@@ -20,6 +20,9 @@ const App = () => {
                <Routes>
                     <Route path="/" element={<MainPage/>}/>
                     <Route path="/comics" element={<ComicsPage/>}/>
+                    {/* название :comicId мы придумываем сами */}
+                    <Route path="/comics/:comicId" element={<SingleComicPage/>}/> 
+                    <Route path="*" element={<Page404/>}/>
                </Routes>
             </main>
         </div>
