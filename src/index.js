@@ -9,6 +9,7 @@ import {
   UseRefForm,
   UseMemoSlider,
   CustomHook,
+  MyTestTransition,
  } from "./Hooks/index";
 import "./style/style.scss";
 
@@ -22,7 +23,8 @@ root.render(
     {/* <UseCallBackSlider/> */}
     {/* <UseMemoSlider/> */}
     {/* <UseRefForm/> */}
-    <CustomHook/>
+    {/* <CustomHook/> */}
+    <MyTestTransition/>
     {/* <Counter counter={0}/> */}
   </StrictMode>
 );
