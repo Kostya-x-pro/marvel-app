@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import ErrorMessage from '../errorMessage/ErrorMessage';
@@ -45,7 +46,7 @@ const CharInfo = (props) => {
 }
 
 const View = ({char}) => {
-    const {name, description, thumbnail, homePage, wiki, comics} = char
+    const {name, description, thumbnail, homePage, wiki, comics} = char;
     let imgStyle = {'objectFit' : 'cover'};
     if (thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
         imgStyle.objectFit = 'contain';
@@ -79,10 +80,11 @@ const View = ({char}) => {
                 {comics.length === 0 ? 'Комиксы отсутствуют...' : null}
                 {
                     comics.map((item, i) => {
+                    const comicId = item.resourceURI.slice(43);
                             if (i > 9) return
                         return (
                             <li key={i} className="char__comics-item">
-                            {item.name}
+                                <Link to={`/comics/${comicId}`}>{item.name}</Link>
                             </li>
                         )
                     })
