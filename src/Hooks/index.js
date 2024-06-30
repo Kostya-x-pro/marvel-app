@@ -5,6 +5,7 @@ import UseMemoSlider from "./useMemo/useMemo-Slider";
 import UseRefForm from "./useRef/useRef-Form";
 import CustomHook from "./customHook/customHook";
 import MyTestTransition from "./useTransition_useDeferredValue/useTransition";
+import UseReduser from "./useReduser/useReduser";
 
 export {
   UseStateSlider,
@@ -13,5 +14,6 @@ export {
   UseRefForm,
   CustomHook,
   MyTestTransition,
+  UseReduser,
   Counter
 }
