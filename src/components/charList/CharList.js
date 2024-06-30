@@ -83,30 +83,6 @@ const CharList = (props) => {
 
     const errorMessage = error ? <ErrorMessage/> : null;
     const spinner = loading && !newItemLoading ? <Spinner/> : null;
-
-    // Динамический импорт всегда возвращает Promise
-    // Динамический импорт (вариант 1) "React lazy ленивая загрузка"
-    // if (loading) {
-    //     import('./someFunc')
-    //         .then(obj => {
-    //             console.log(obj);
-    //             obj.logger()
-    //         })
-    //         .catch()
-    // }
-    // Динамический импорт (вариант 2) "React lazy ленивая загрузка"
-        // if (loading) {
-        //     async () => {
-        //         const {logger, seccondLogger} = await import('./someFunc');
-        //         logger();
-        //     }
-        // }
-    // Динамический импорт (вариант 3) "React lazy ленивая загрузка" (если export default)
-    // if (loading) {
-    //     import('./someFunc')
-    //         .then(obj => obj.default())
-    //         .catch()
-    // }
         
     return (
         <div className="char__list">
