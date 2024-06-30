@@ -1,6 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./components/app/App";
+import HOC from "./HOC/HOC";
 
 import {
   UseStateSlider, 
@@ -12,6 +13,7 @@ import {
   UseReduser,
   MyTestTransition,
  } from "./Hooks/index";
+
 import "./style/style.scss";
 
 const container = document.getElementById("root");
@@ -26,7 +28,8 @@ root.render(
     {/* <UseRefForm/> */}
     {/* <CustomHook/> */}
     {/* <MyTestTransition/> */}
-    <UseReduser/>
+    {/* <UseReduser/> */}
+    <HOC/>
     {/* <Counter counter={0}/> */}
   </StrictMode>
 );
