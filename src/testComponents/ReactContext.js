@@ -1,4 +1,4 @@
-import {useState, memo, Component, createContext} from 'react';
+import {useState, memo, Component, createContext, useContext} from 'react';
 import { Container } from 'react-bootstrap';
 
 // createContext - принимает 1 аргумент (значение по умолчанию)
@@ -11,8 +11,6 @@ const dataContext = createContext({
 // Consumer - компонент который позволяет получить эти данные (он же и подписывается на изменнения в контексте)
 
 const {Provider, Consumer} = dataContext;
-
-
 
 const Form = memo((props) => {
   console.log('render');
@@ -33,44 +31,19 @@ const Form = memo((props) => {
     )
 }) 
 
-class InputComponent extends Component{
-  // 3 способ передачи контекста в классовых компонентах (вместо того что находится за компонентом)
-  static contextType = dataContext;
+const InputComponent = () => {
+  // Передача контекста в функциональных компоненатх
+  const context = useContext(dataContext);
 
-  render() {
-    // 1 способ передачи контекста в классовых компонентах
-    return (
-      // Consumer принемает рендер пропс в виде колбэка
-      // <Consumer>
-      //   {
-      //     value => {
-      //       return (
-      //         <input 
-      //           value={value.mail} 
-      //           type="email" 
-      //           className='form-control' 
-      //           id="exampleFormControlInput1" 
-      //           placeholder="name@example.com"/>
-      //       )
-      //     }
-      //   }
-      // </Consumer>
-
-      // 2 способ передачи контекста в классовых компонентах
-      <input 
-        value={this.context.mail} 
-        type="email" 
-        className='form-control' 
-        id="exampleFormControlInput1" 
-        placeholder="name@example.com"/>
-
-    )
-  }
+  return (
+    <input 
+      value={context.mail} 
+      type="email" 
+      className='form-control' 
+      id="exampleFormControlInput1" 
+      placeholder="name@example.com"/>
+  )
 }
-
-// к 2 способу
-// InputComponent.contextType = dataContext;
-
 
 function ReactContext() {
     const [data, setData] = useState({
