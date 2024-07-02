@@ -1,24 +1,7 @@
 import { useFormik } from "formik";
+// Импортировать всё в объект Yup из библеотеки yup
+import * as Yup from 'yup'
 
-// ручная валидация формы
-const validate = values => {
-    const errors = {};
-
-    if (!values.name) {
-        errors.name = 'Обязательное поле!';
-    } else if (values.name.length < 2) {
-        errors.name = 'Минимум 2 символа для заполнения'
-    }
-
-    if (!values.email) {
-        errors.email = 'Обязательное поле!';
-    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
-        errors.email = 'Не правильный email адресс';
-    }
-    // Дальше можно добавить проверки остальных полей...
-
-    return errors;
-}
 
 const Form = () => {
     const formik = useFormik({
@@ -31,8 +14,24 @@ const Form = () => {
             text: '',
             terms: false,
         },
-        // 2. функция ручной валидации формы
-        validate, // сокращенная форма validate: validate (эта функция будет срабатывать каждый раз при срабатываеии функции handleChange)
+        // 2. функция validationSchema приходит из библеотеки по валидации YUP
+        validationSchema: Yup.object({
+            name: Yup.string()
+                    .min(2, 'Минимум 2 символа!')
+                    .required('Обязательное поле!'),
+            email: Yup.string()
+                    .email('Неправильный email адрес')
+                    .required('Обязательное поле!'),
+            amount: Yup.number()
+                    .min(5, 'Не менее 5')
+                    .required('Обязательное поле!'),
+            currency: Yup.string().required('Выберите валюту'),
+            text: Yup.string()
+                    .min(10, 'Минимум 10 символов!'),
+            terms: Yup.boolean()
+                    .required('Необходимо согласие')
+                    .oneOf([true], 'Необходимо согласие'),
+        }), 
         // 3. функция (handleSubmit) при отправке нашей формы (Конструкция с JSON что бы вывести удобо читаемый объект)
         onSubmit: values => console.log(JSON.stringify(values, null, 2))
         // 4. У этого хука есть объект touched (который отвечает за то что если мы взаимодействуем с конкретным инпутом то только тогда именно в нём будет выскакивать подсказка что мы сделали что то не так. если мы не назначим событие onBlur то подсказки будут выскакивать на всех инпутах )
@@ -51,7 +50,7 @@ const Form = () => {
               // onBlur событие когда фокус ушел с инпута  
               onBlur={formik.handleBlur}
           />
-          {formik.errors.name && formik.touched.name ? <div>{formik.errors.name}</div> : null}
+          {formik.errors.name && formik.touched.name ? <div className="error">{formik.errors.name}</div> : null}
           <label htmlFor="email">Ваша почта</label>
           <input
               id="email"
@@ -62,7 +61,7 @@ const Form = () => {
               // onBlur событие когда фокус ушел с инпута  
               onBlur={formik.handleBlur}
           />
-          {formik.errors.email && formik.touched.name ? <div>{formik.errors.email}</div> : null}
+          {formik.errors.email && formik.touched.email ? <div className="error">{formik.errors.email}</div> : null}
           <label htmlFor="amount">Количество</label>
           <input
               id="amount"
@@ -73,6 +72,7 @@ const Form = () => {
               // onBlur событие когда фокус ушел с инпута  
               onBlur={formik.handleBlur}
           />
+          {formik.errors.amount && formik.touched.amount ? <div className="error">{formik.errors.amount}</div> : null}
           <label htmlFor="currency">Валюта</label>
           <select
               id="currency"
@@ -87,6 +87,7 @@ const Form = () => {
                   <option value="UAH">UAH</option>
                   <option value="RUB">RUB</option>
           </select>
+          {formik.errors.currency && formik.touched.currency ? <div className="error">{formik.errors.currency}</div> : null}
           <label htmlFor="text">Ваше сообщение</label>
           <textarea 
               id="text"
@@ -96,6 +97,7 @@ const Form = () => {
               // onBlur событие когда фокус ушел с инпута  
               onBlur={formik.handleBlur}
           />
+          {formik.errors.text && formik.touched.text ? <div className="error">{formik.errors.text}</div> : null}
           <label className="checkbox">
               <input 
                 name="terms" 
@@ -107,6 +109,7 @@ const Form = () => {
                  />
               Соглашаетесь с политикой конфиденциальности?
           </label>
+          {formik.errors.terms && formik.touched.terms ? <div className="error">{formik.errors.terms}</div> : null}
           <button type="submit">Отправить</button>
       </form>
   )
