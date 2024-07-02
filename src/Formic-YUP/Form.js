@@ -44,76 +44,48 @@ const CustomForm = () => {
                 id="name"
                 name="name"
                 type="text"
-                // Встроенная функция в Формик которая позволяет получить поля конкретного инпута (она заменяет value, onChange={handleChange}, onBlur={handleBlur}) не нужен если мы используем Field (вместо inputa)
-                // {...formik.getFieldProps('name')} 
             />
-            {/* {formik.errors.name && formik.touched.name ? <div className="error">{formik.errors.name}</div> : null}  компонент ErrorMessage заменяет эту конструкцию */}
             <ErrorMessage className='error' name="name" component="div"/> 
             <label htmlFor="email">Ваша почта</label>
             <Field
                 id="email"
                 name="email"
                 type="email"
-                // value={formik.values.email}
-                // onChange={formik.handleChange}
-                // // onBlur событие когда фокус ушел с инпута  
-                // onBlur={formik.handleBlur}
             />
-            {/* {formik.errors.email && formik.touched.email ? <div className="error">{formik.errors.email}</div> : null} */}
             <ErrorMessage className='error' name="email" component="div"/>
             <label htmlFor="amount">Количество</label>
             <Field
                 id="amount"
                 name="amount"
                 type="number"
-                // value={formik.values.amount}
-                // onChange={formik.handleChange}
-                // // onBlur событие когда фокус ушел с инпута  
-                // onBlur={formik.handleBlur}
             />
-            {/* {formik.errors.amount && formik.touched.amount ? <div className="error">{formik.errors.amount}</div> : null} */}
             <ErrorMessage className='error' name="amount" component="div"/>
             <label htmlFor="currency">Валюта</label>
             <Field
                 id="currency"
                 name="currency"
                 as="select" // этот проп говорит компоненту Field что бы он рендорился как "select"
-                // value={formik.values.currency}
-                // onChange={formik.handleChange}
-                // // onBlur событие когда фокус ушел с инпута  
-                // onBlur={formik.handleBlur}
                 >
                     <option value="">Выберите валюту</option>
                     <option value="USD">USD</option>
                     <option value="UAH">UAH</option>
                     <option value="RUB">RUB</option>
             </Field>
-            {/* {formik.errors.currency && formik.touched.currency ? <div className="error">{formik.errors.currency}</div> : null} */}
             <ErrorMessage className='error' name="currency" component="div"/>
             <label htmlFor="text">Ваше сообщение</label>
             <Field
                 id="text"
                 name="text"
                 as="textarea"
-                // value={formik.values.text}
-                // onChange={formik.handleChange}
-                // // onBlur событие когда фокус ушел с инпута  
-                // onBlur={formik.handleBlur}
             />
             <ErrorMessage className='error' name="text" component="div"/>
-            {/* {formik.errors.text && formik.touched.text ? <div className="error">{formik.errors.text}</div> : null} */}
             <label className="checkbox">
                 <Field 
                     name="terms" 
                     type="checkbox"
-                    // value={formik.values.terms}
-                    // onChange={formik.handleChange}
-                    // // onBlur событие когда фокус ушел с инпута  
-                    // onBlur={formik.handleBlur}
                     />
                 Соглашаетесь с политикой конфиденциальности?
             </label>
-            {/* {formik.errors.terms && formik.touched.terms ? <div className="error">{formik.errors.terms}</div> : null} */}
             <ErrorMessage className='error' name="terms" component="div"/>
             <button type="submit">Отправить</button>
         </Form>
