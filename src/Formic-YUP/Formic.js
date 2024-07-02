@@ -1,10 +1,10 @@
 import './Formic.scss';
-import Form from './Form';
+import CustomForm from './Form';
 
 function Formic() {
   return (
     <div className="app">
-        <Form/>
+        <CustomForm/>
     </div>
   );
 }
