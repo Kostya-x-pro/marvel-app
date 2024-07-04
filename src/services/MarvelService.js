@@ -22,6 +22,12 @@ const useMarvelService = () => {
     const res = await request(`${_apiBase}characters/${id}?${_apiKey}`);
     return _transformCharacter(res.data.results[0]);
   }
+
+  // Метод для получения персонажа по имени
+  const getCharacterByName = async (name) => {
+		const res = await request(`${_apiBase}characters?name=${name}&${_apiKey}`);
+		return res.data.results.map(_transformCharacter);
+	};
     
   // Метод трансформации данных которые мы получаем в API
   const _transformCharacter = (char) => {
@@ -65,7 +71,7 @@ const useMarvelService = () => {
     }
   }
 
-  return {loading, error, getAllCharacters, getCharacter, clearError, getAllComics, getComic}
+  return {loading, error, getAllCharacters, getCharacter, clearError, getAllComics, getComic, getCharacterByName}
 }
 
 export default useMarvelService;
