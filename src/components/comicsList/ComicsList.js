@@ -7,13 +7,32 @@ import useMarvelService from '../../services/MarvelService';
 
 import './comicsList.scss';
 
+const setContent = (process, Component, newItemLoading) => {
+    switch(process) {
+        case 'waiting':
+            return <Spinner/>
+            break
+        case 'loading':
+            return newItemLoading ? <Component/> : <Spinner/>
+            break
+        case 'confirmed':
+            return <Component/>;
+            break
+        case 'error':
+            return <ErrorMessage/>
+            break
+        default: 
+            throw new Error('Unexpected process state');
+    }
+}
+
 const ComicsList = () => {
     const [comicList, setComicList] = useState([]);
     const [newComicLoading, setNewComicLodaing] = useState(false);
     const [offset, setOffset] = useState(100);
     const [comicEnded, setComicEnded] = useState(false);
     
-    const {error, loading, getAllComics} = useMarvelService();
+    const {getAllComics, process, setProcess} = useMarvelService();
 
     useEffect(() => {
         onRequest(offset, true);
@@ -23,6 +42,7 @@ const ComicsList = () => {
         initial ? setNewComicLodaing(false) : setNewComicLodaing(true);
         getAllComics(offset)
             .then(onComicLoaded)
+            .then(() => setProcess('confirmed'))
     }
 
     const onComicLoaded = (newComicList) => {
@@ -63,20 +83,12 @@ const ComicsList = () => {
             <ul className="comics__grid">
                 {items}
             </ul>
-        )
-        
+        )    
     }
-
-    const items = renderItems(comicList);
-    
-    const errorMessage = error ? <ErrorMessage/> : null;
-    const spinner = loading && !newComicLoading ? <Spinner/> : null;
 
     return (
         <div className="comics__list">
-            {errorMessage}
-            {spinner}
-            {items}
+            {setContent(process, () => renderItems(comicList), newComicLoading)}
             <button 
             className="button button__main button__long"
             onClick={() => onRequest(offset)}
