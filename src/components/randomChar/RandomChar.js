@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import useMarvelService from '../../services/MarvelService';
-import setContent from '../../utils/setContent';
+import {setContent} from '../../utils/setContent';
 
 import './randomChar.scss';
 import mjolnir from '../../resources/img/mjolnir.png';

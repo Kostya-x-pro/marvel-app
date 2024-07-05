@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 import useMarvelService from "../../services/MarvelService";
-import setContent from "../../utils/setContent";
+import {setContent} from "../../utils/setContent";
 import AppBanner from "../appBanner/AppBanner";
 
 const SinglePage = ({ Component, dataType }) => {

@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-import setContent from '../../utils/setContent';
+import {setContent} from '../../utils/setContent';
 import useMarvelService from '../../services/MarvelService';
 
 import './charInfo.scss';

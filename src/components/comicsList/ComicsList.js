@@ -1,30 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-import Spinner from '../spinner/Spinner';
-import ErrorMessage from '../errorMessage/ErrorMessage';
 import useMarvelService from '../../services/MarvelService';
+import { setContentWithNewLoadingData } from '../../utils/setContent';
 
 import './comicsList.scss';
-
-const setContent = (process, Component, newItemLoading) => {
-    switch(process) {
-        case 'waiting':
-            return <Spinner/>
-            break
-        case 'loading':
-            return newItemLoading ? <Component/> : <Spinner/>
-            break
-        case 'confirmed':
-            return <Component/>;
-            break
-        case 'error':
-            return <ErrorMessage/>
-            break
-        default: 
-            throw new Error('Unexpected process state');
-    }
-}
 
 const ComicsList = () => {
     const [comicList, setComicList] = useState([]);
@@ -88,7 +68,7 @@ const ComicsList = () => {
 
     return (
         <div className="comics__list">
-            {setContent(process, () => renderItems(comicList), newComicLoading)}
+            {setContentWithNewLoadingData(process, () => renderItems(comicList), newComicLoading)}
             <button 
             className="button button__main button__long"
             onClick={() => onRequest(offset)}
