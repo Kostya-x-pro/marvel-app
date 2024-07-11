@@ -1,61 +1,94 @@
-import './charInfo.scss';
-import thor from '../../resources/img/thor.jpeg';
+import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 
-const CharInfo = () => {
+import {setContent} from '../../utils/setContent';
+import useMarvelService from '../../services/MarvelService';
+
+import './charInfo.scss';
+
+const CharInfo = (props) => {
+    const [char, setChar] = useState(null);
+
+    const {getCharacter, clearError, process, setProcess} = useMarvelService();
+
+    useEffect(() => {
+        updateChar();
+    }, [props.charId])
+
+    const updateChar = () => {
+        const {charId} = props;
+        if (!charId) {
+            return
+        }
+
+        clearError();
+        getCharacter(charId)
+            .then(onCharLoaded)
+            .then(() => setProcess('confirmed'))
+    }
+
+    const onCharLoaded = (char) => setChar(char);
+
+
     return (
         <div className="char__info">
+            {setContent(process, View, char)}
+        </div>
+    )
+}
+
+const View = ({data}) => {
+    const {name, description, thumbnail, homePage, wiki, comics} = data;
+    let imgStyle = {'objectFit' : 'cover'};
+    if (thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
+        imgStyle.objectFit = 'contain';
+    }
+
+    return (
+        <>
             <div className="char__basics">
-                <img src={thor} alt="abyss"/>
+                <img 
+                    src={thumbnail} 
+                    alt={name}
+                    style={imgStyle}
+                    />
                 <div>
-                    <div className="char__info-name">thor</div>
+                    <div className="char__info-name">{name}</div>
                     <div className="char__btns">
-                        <a href="#" className="button button__main">
-                            <div className="inner">homepage</div>
+                        <a href={homePage} className="button button__main">
+                            <div className="inner">HOMEPAGE</div>
                         </a>
-                        <a href="#" className="button button__secondary">
-                            <div className="inner">Wiki</div>
+                        <a href={wiki} className="button button__secondary">
+                            <div className="inner">wiki</div>
                         </a>
                     </div>
                 </div>
             </div>
             <div className="char__descr">
-                In Norse mythology, Loki is a god or jötunn (or both). Loki is the son of Fárbauti and Laufey, and the brother of Helblindi and Býleistr. By the jötunn Angrboða, Loki is the father of Hel, the wolf Fenrir, and the world serpent Jörmungandr. By Sigyn, Loki is the father of Nari and/or Narfi and with the stallion Svaðilfari as the father, Loki gave birth—in the form of a mare—to the eight-legged horse Sleipnir. In addition, Loki is referred to as the father of Váli in the Prose Edda.
+             {description}
             </div>
             <div className="char__comics">Comics:</div>
             <ul className="char__comics-list">
-                <li className="char__comics-item">
-                    All-Winners Squad: Band of Heroes (2011) #3
-                </li>
-                <li className="char__comics-item">
-                    Alpha Flight (1983) #50
-                </li>
-                <li className="char__comics-item">
-                    Amazing Spider-Man (1999) #503
-                </li>
-                <li className="char__comics-item">
-                    Amazing Spider-Man (1999) #504
-                </li>
-                <li className="char__comics-item">
-                    AMAZING SPIDER-MAN VOL. 7: BOOK OF EZEKIEL TPB (Trade Paperback)
-                </li>
-                <li className="char__comics-item">
-                    Amazing-Spider-Man: Worldwide Vol. 8 (Trade Paperback)
-                </li>
-                <li className="char__comics-item">
-                    Asgardians Of The Galaxy Vol. 2: War Of The Realms (Trade Paperback)
-                </li>
-                <li className="char__comics-item">
-                    Vengeance (2011) #4
-                </li>
-                <li className="char__comics-item">
-                    Avengers (1963) #1
-                </li>
-                <li className="char__comics-item">
-                    Avengers (1996) #1
-                </li>
+                {comics.length === 0 ? 'Комиксы отсутствуют...' : null}
+                {
+                    comics.map((item, i) => {
+                    const comicId = item.resourceURI.slice(43);
+                            if (i > 9) return
+                        return (
+                            <li key={i} className="char__comics-item">
+                                <Link to={`/comics/${comicId}`}>{item.name}</Link>
+                            </li>
+                        )
+                    })
+                }         
             </ul>
-        </div>
+        </>
     )
+}
+
+CharInfo.propTypes = {
+    charId: PropTypes.number
 }
 
 export default CharInfo;
