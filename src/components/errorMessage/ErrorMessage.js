@@ -7,11 +7,3 @@ const ErrorMessage = () => {
 }
 
 export default ErrorMessage
-
-
-// const ErrorMessage = () => {
-//   // Способ обращения к папке publick
-//   return (
-//     <img src={process.env.PUBLIC_URL + '/error.gif'}/>
-//   )
-// }

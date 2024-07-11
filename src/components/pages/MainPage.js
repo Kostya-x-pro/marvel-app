@@ -13,7 +13,6 @@ const MainPage = () => {
   const [selectedChar, setChar] = useState(null)
 
   const onCharselected = (id) => setChar(id);
-  //Библеотека Helmet помогает настроить метат теги тайтлы и прочее на разных страницах приложения 
   return (
     <>
       <Helmet>

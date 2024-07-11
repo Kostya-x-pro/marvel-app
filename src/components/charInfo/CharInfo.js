@@ -8,7 +8,7 @@ import useMarvelService from '../../services/MarvelService';
 import './charInfo.scss';
 
 const CharInfo = (props) => {
-    const [char, setChar] = useState(null); // потому что {} в логич контексте true
+    const [char, setChar] = useState(null);
 
     const {getCharacter, clearError, process, setProcess} = useMarvelService();
 
@@ -18,7 +18,6 @@ const CharInfo = (props) => {
 
     const updateChar = () => {
         const {charId} = props;
-        // если нет id то прекратить обновление
         if (!charId) {
             return
         }
@@ -88,7 +87,6 @@ const View = ({data}) => {
     )
 }
 
-// Валидация пропсов с помощью компонента propTypes (устанавливается как зависимость)
 CharInfo.propTypes = {
     charId: PropTypes.number
 }

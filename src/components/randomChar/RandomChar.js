@@ -19,12 +19,10 @@ const RandomChar = () => {
         }
     }, [])
 
-    // Метод который устанавливает загрузку персонажей
     const onCharLoaded = (char) => {
         setChar(char);
     }
 
-    // Метод получения случайного персонажа по id из API
     const updateChar = () => {
         clearError();
         const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000) // генерация случайного id в диапазоне апишки
@@ -33,7 +31,6 @@ const RandomChar = () => {
             .then(() => setProcess('confirmed'))
     }
 
-    // Способ рендера с помощью стейт машин
     return (
         <div className="randomchar">
         {setContent(process, View, char)}

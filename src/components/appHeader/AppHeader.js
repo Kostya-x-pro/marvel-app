@@ -1,12 +1,5 @@
 import { Link, NavLink } from "react-router-dom";
 import './appHeader.scss';
-
-// Link - компонент который будет заменять ссылки и направлять при клике по пути "path"
-// NavLink - компонент который будет заменять ссылки и направлять при клике по пути "path" только стилизованный (можно применять классы)
-
-// exact - заменён на end
-// activStyle - удалён. (теперь стили нужно передовать функцию в виде колбэка)
-
 const AppHeader = () => {
     return (
         <header className="app__header">

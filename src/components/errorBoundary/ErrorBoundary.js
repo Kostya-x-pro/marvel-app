@@ -24,11 +24,9 @@ class ErrorBoundary extends Component{
   }
 
   render() {
-    // Если что то пошло не так то и в стейте "error" будет равен "true" то мы рендорим какой то компонент
     if (this.state.error) {  
       return <ErrorMessage/>
     }
-    // Если же ок то рендорим "this.props.children" (это по сути то что находится внутри компонента ErorBoundary например компонент "RandonChar")
     return this.props.children
   }
 }
